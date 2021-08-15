@@ -30,7 +30,7 @@ var Agenda = types.model({
 
 window.model = Agenda.create({
   tasks: {
-    [Math.random()]: { label: "Have dinner", done: false },
+    [Math.random()]: { label: "Have dinner", done: true },
   }
 })
 
