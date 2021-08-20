@@ -5,17 +5,12 @@ import { Observer } from "mobx-react"
 import moment from 'moment-timezone';
 
 const templates = observable.map({});
-const timestamps = observable.map({})
 
 const loadTemplate = (modelName, templateName) => {
-
   import(`./models/${modelName}/${templateName}`)
     .then((module) => {
-        if (!templates[modelName]) templates.set(modelName, observable.map({}))
-        templates.get(modelName).set(templateName, module.default)
-
-        if(!timestamps[modelName]) timestamps.set(modelName, observable.map({}))
-        timestamps.get(modelName).set(templateName, moment().toString())
+      if (!templates[modelName]) templates.set(modelName, observable.map({}))
+      templates.get(modelName).set(templateName, module.default)
     });
 };
 
@@ -27,13 +22,7 @@ const template = (self, templateName) => {
       let available = false;
 
       try {
-        var timestamp = moment(timestamps.get(modelName).get(templateName))
-
-        available = (
-          timestamp
-          && !timestamp.invalid
-          && templates.get(modelName).get(templateName)
-        );
+        available = templates.get(modelName).get(templateName)
       } catch (e) {
         available = false;
       }
