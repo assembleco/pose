@@ -1,46 +1,55 @@
 import React from 'react';
 import { applyPatch } from 'mobx-state-tree';
+import { observable, runInAction } from 'mobx';
+import { Observer } from "mobx-react"
 import moment from 'moment-timezone';
 
-const templates = {};
+const templates = observable.map({});
+const timestamps = observable.map({})
 
 const loadTemplate = (modelName, templateName) => {
-  if (!templates[modelName]) templates[modelName] = {};
 
   import(`./models/${modelName}/${templateName}`)
     .then((module) => {
-      templates[modelName][templateName] = module.default;
+        if (!templates[modelName]) templates.set(modelName, observable.map({}))
+        templates.get(modelName).set(templateName, module.default)
 
-      applyPatch(window.model, {
-        op: 'replace',
-        path: `/_templates/${modelName}/${templateName}`,
-        value: moment(),
-      });
+        if(!timestamps[modelName]) timestamps.set(modelName, observable.map({}))
+        timestamps.get(modelName).set(templateName, moment().toString())
     });
 };
 
 const template = (self, templateName) => {
-  let available = false;
   const modelName = self.$treenode.type.name;
 
-  try {
-    const timestamp = self.$treenode.root.value._templates[modelName][templateName];
+  return (
+    <Observer>{() => {
+      let available = false;
 
-    available = (
-      timestamp
-      && !timestamp.invalid
-      && templates[modelName][templateName]
-    );
-  } catch (e) {
-    available = false;
-  }
+      try {
+        var timestamp = moment(timestamps.get(modelName).get(templateName))
 
-  return available
-    ? React.createElement(
-      templates[modelName][templateName],
-      { self, key: `${self.$treenode.path}:${templateName}` },
-    )
-    : null;
+        available = (
+          timestamp
+          && !timestamp.invalid
+          && templates.get(modelName).get(templateName)
+        );
+      } catch (e) {
+        available = false;
+      }
+
+      return (
+        available
+        ?
+        React.createElement(
+          templates.get(modelName).get(templateName),
+          { self, key: `${self.$treenode.path}:${templateName}` },
+        )
+
+        : null
+      )
+    }}</Observer>
+  )
 };
 
 export default (self) => () => {
@@ -55,8 +64,6 @@ export default (self) => () => {
     })
     .filter((file) => file !== 'index')
     .filter((module) => module !== null);
-
-  console.log(templateNames)
 
   templateNames.forEach((templateName) => {
     loadTemplate(modelName, templateName);
