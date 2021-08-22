@@ -1,17 +1,15 @@
 import React from 'react';
-import { applyPatch } from 'mobx-state-tree';
-import { observable, runInAction } from 'mobx';
+import { observable } from 'mobx';
 import { Observer } from "mobx-react"
-import moment from 'moment-timezone';
+import loadable from "@loadable/component"
 
 const templates = observable.map({});
 
 const loadTemplate = (modelName, templateName) => {
-  import(`./models/${modelName}/${templateName}`)
-    .then((module) => {
-      if (!templates[modelName]) templates.set(modelName, observable.map({}))
-      templates.get(modelName).set(templateName, module.default)
-    });
+  var Component = loadable(() => import(`./models/${modelName}/${templateName}`))
+
+  if (!templates[modelName]) templates.set(modelName, observable.map({}))
+  templates.get(modelName).set(templateName, Component)
 };
 
 const template = (self, templateName) => {
