@@ -5,9 +5,5 @@ var Task = types.model('task', {
   label: types.string,
   done: types.boolean,
 })
-  .actions(self => ({
-  }))
-  .views(self => ({
-  }))
 
 export default loadDisplays(Task)

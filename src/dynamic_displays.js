@@ -18,8 +18,8 @@ const loadDisplay = (model, display) => {
 const render = (self, model, display) => (
   <Observer>{() => {
     console.log("Rendering", model, display)
-    let available = false;
 
+    let available = false;
     try {
       available = loaded.get(model).get(display)
     } catch (e) {
@@ -61,6 +61,10 @@ var loadDisplays = (model) => {
 
       displays.forEach(display => {
         views[display] = () => render(self, model.name, display)
+
+        // Object.defineProperty(views, display, {
+        //   get: function() { return render(self, model.name, display) }
+        // })
       })
 
       return views
