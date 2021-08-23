@@ -6,6 +6,8 @@ import { Icon } from "@iconify/react"
 export default observer(({ self }) => {
   return (
     <div>
+    aaa
+    {/*
       <input
         type="checkbox"
         checked={self.done}
@@ -16,12 +18,27 @@ export default observer(({ self }) => {
         })}
       />
 
-      {self.label}
+      <input
+        type="text"
+        value={self._change.label}
+        onChange={(e) => applyPatch(self, {
+          op: "replace",
+          path: "./_change/label",
+          value: e.target.value,
+        })}
+        onKeyDown={(e) => { if(e.key === "Enter") self.record() }}
+      />
 
       <Icon
-        icon="ci:edit"
-        onClick={self.change}
+        icon="ci:check"
+        onClick={self.record}
       />
+
+      <Icon
+        icon="iconoir:cancel"
+        onClick={self.cancel}
+      />
+      */}
     </div>
   )
 })

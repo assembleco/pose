@@ -12,35 +12,32 @@ const loadTemplate = (modelName, templateName) => {
   templates.get(modelName).set(templateName, Component)
 };
 
-const template = (self, templateName) => {
-  const modelName = self.$treenode.type.name;
+const template = (self, modelName, templateName) => (
+  <Observer>{() => {
+    let available = false;
 
-  return (
-    <Observer>{() => {
-      let available = false;
+    try {
+      available = templates.get(modelName).get(templateName)
+    } catch (e) {
+      available = false;
+    }
 
-      try {
-        available = templates.get(modelName).get(templateName)
-      } catch (e) {
-        available = false;
-      }
-
-      return (
-        available
-        ?
-        React.createElement(
-          templates.get(modelName).get(templateName),
-          { self, key: `${self.$treenode.path}:${templateName}` },
-        )
-
-        : null
+    return (
+      available
+      ?
+      React.createElement(
+        templates.get(modelName).get(templateName),
+        { self, key: `${self.$treenode.path}:${templateName}` },
       )
-    }}</Observer>
-  )
-};
 
-export default (self) => () => {
-  const modelName = self.$treenode.type.name;
+      : null
+    )
+  }}</Observer>
+)
+
+export default (self) => (modelName = null) => {
+  if(!modelName)
+    modelName = self.$treenode.type.name;
 
   const templateNames = require
     .context('./models/', true, /\.js$/)
@@ -56,7 +53,7 @@ export default (self) => () => {
     loadTemplate(modelName, templateName);
 
     Object.defineProperty(self, templateName, {
-      get: () => template(self, templateName),
+      get: () => template(self, modelName, templateName),
     });
   });
 };

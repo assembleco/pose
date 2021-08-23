@@ -6,7 +6,7 @@ var Task = types.model('task', {
   done: types.boolean,
 })
   .actions(self => ({
-    afterCreate: () => { initializeTemplates(self)() },
+    afterCreate: () => { initializeTemplates(self)("task") },
   }))
   .views(self => ({
   }))
