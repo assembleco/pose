@@ -4,7 +4,7 @@ import { applyPatch } from "mobx-state-tree"
 import { Icon } from "@iconify/react"
 
 export default observer(({ self }) => {
-  var [editing, setEditing] = React.useState(false)
+  var [changed, change] = React.useState(null)
 
   return (
     <div>
@@ -18,21 +18,29 @@ export default observer(({ self }) => {
         })}
       />
 
-      {editing
+      {changed
         ?
         <>
           <input
             type="text"
-            value={self.label}
-            onChange={(e) => applyPatch(self, {
-              op: "replace",
-              path: "./label",
-              value: e.target.value,
-            })}
+            value={changed}
+            onChange={(e) => change(e.target.value)}
           />
           <Icon
             icon="ci:check"
-            onClick={() => setEditing(false)}
+            onClick={() => {
+              applyPatch(self, {
+                op: "replace",
+                path: "./label",
+                value: changed,
+              })
+              change(null)
+            }}
+          />
+
+          <Icon
+            icon="iconoir:cancel"
+            onClick={() => change(null)}
           />
         </>
 
@@ -41,7 +49,7 @@ export default observer(({ self }) => {
           {self.label}
           <Icon
             icon="ci:edit"
-            onClick={() => setEditing(true)}
+            onClick={() => change(self.label)}
           />
         </>
 
