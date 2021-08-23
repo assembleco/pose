@@ -30,7 +30,7 @@ var Program = types.model({
 window.model = Program.create({
   tasks: [
     { label: "Have dinner", done: true,
-      // _change: { label: "Have supper", done: true },
+      _change: { label: "Have supper", done: true },
     },
   ],
 })
