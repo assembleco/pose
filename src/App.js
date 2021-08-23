@@ -5,13 +5,13 @@ import { observer } from "mobx-react"
 import Task from "./models/task"
 
 var Program = types.model({
-  tasks: types.map(Task),
+  tasks: types.array(Task),
 })
 
 window.model = Program.create({
-  tasks: {
-    [Math.random()]: { label: "Have dinner", done: true },
-  },
+  tasks: [
+    { label: "Have dinner", done: true },
+  ],
 })
 
 onPatch(window.model, patch => {
