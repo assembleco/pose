@@ -44,8 +44,8 @@ function App() {
     <>
       {window.model.tasks.map(task =>
         task._change
-        ? task.changing
-        : task.display
+        ? task.something()
+        : task.display()
       )}
     </>
   );
