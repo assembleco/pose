@@ -3,21 +3,21 @@ import { observable } from 'mobx';
 import { Observer } from "mobx-react"
 import loadable from "@loadable/component"
 
-const templates = observable.map({});
+const displays = observable.map({});
 
-const loadTemplate = (modelName, templateName) => {
-  var Component = loadable(() => import(`./models/${modelName}/${templateName}`))
+const loadDisplay = (model, display) => {
+  var Component = loadable(() => import(`./models/${model}/${display}`))
 
-  if (!templates[modelName]) templates.set(modelName, observable.map({}))
-  templates.get(modelName).set(templateName, Component)
+  if (!displays[model]) displays.set(model, observable.map({}))
+  displays.get(model).set(display, Component)
 };
 
-const template = (self, modelName, templateName) => (
+const render = (self, model, display) => (
   <Observer>{() => {
     let available = false;
 
     try {
-      available = templates.get(modelName).get(templateName)
+      available = displays.get(model).get(display)
     } catch (e) {
       available = false;
     }
@@ -26,8 +26,8 @@ const template = (self, modelName, templateName) => (
       available
       ?
       React.createElement(
-        templates.get(modelName).get(templateName),
-        { self, key: `${self.$treenode.path}:${templateName}` },
+        displays.get(model).get(display),
+        { self, key: `${self.$treenode.path}:${display}` },
       )
 
       : null
@@ -35,25 +35,25 @@ const template = (self, modelName, templateName) => (
   }}</Observer>
 )
 
-export default (self) => (modelName = null) => {
-  if(!modelName)
-    modelName = self.$treenode.type.name;
+export default (self) => (model = null) => {
+  if(!model)
+    model = self.$treenode.type.name;
 
-  const templateNames = require
+  const displayNames = require
     .context('./models/', true, /\.js$/)
     .keys()
     .map((file) => {
-      const module = new RegExp(`^./${modelName}/(.+).js$`).exec(file);
+      const module = new RegExp(`^./${model}/(.+).js$`).exec(file);
       return module && module[1];
     })
     .filter((file) => file !== 'index')
     .filter((module) => module !== null);
 
-  templateNames.forEach((templateName) => {
-    loadTemplate(modelName, templateName);
+  displayNames.forEach((display) => {
+    loadDisplay(model, display);
 
-    Object.defineProperty(self, templateName, {
-      get: () => template(self, modelName, templateName),
+    Object.defineProperty(self, display, {
+      get: () => render(self, model, display),
     });
   });
 };
