@@ -5,6 +5,14 @@ import { Icon } from "@iconify/react"
 
 export default observer(({ self }) => {
   var [changed, change] = React.useState(null)
+  var record = () => {
+    applyPatch(self, {
+      op: "replace",
+      path: "./label",
+      value: changed,
+    })
+    change(null)
+  }
 
   return (
     <div>
@@ -25,17 +33,11 @@ export default observer(({ self }) => {
             type="text"
             value={changed}
             onChange={(e) => change(e.target.value)}
+            onKeyDown={(e) => { if(e.key === "Enter") record() }}
           />
           <Icon
             icon="ci:check"
-            onClick={() => {
-              applyPatch(self, {
-                op: "replace",
-                path: "./label",
-                value: changed,
-              })
-              change(null)
-            }}
+            onClick={record}
           />
 
           <Icon
