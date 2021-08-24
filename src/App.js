@@ -29,9 +29,7 @@ var Program = types.model({
 
 window.model = Program.create({
   tasks: [
-    { label: "Have dinner", done: true,
-      _change: { label: "Have supper", done: true },
-    },
+    { label: "Have dinner", done: true },
   ],
 })
 
@@ -44,7 +42,7 @@ function App() {
     <>
       {window.model.tasks.map(task =>
         task._change
-        ? task.something()
+        ? task.changing()
         : task.display()
       )}
     </>

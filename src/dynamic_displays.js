@@ -9,27 +9,21 @@ const loaded = observable.map({});
 const loadDisplay = (model, display) => {
   var Component = loadable(() => import(`./models/${model}/${display}`))
 
-  if (!loaded[model]) loaded.set(model, observable.map({}))
+  if (!loaded.get(model)) loaded.set(model, observable.map({}))
   loaded.get(model).set(display, Component)
-
-  console.log("loaded", model, display)
 };
 
 const render = (self, model, display) => (
   <Observer>{() => {
-    console.log("Rendering", model, display)
-
-    let available = false;
+    var ready = false;
     try {
-      available = loaded.get(model).get(display)
+      ready = loaded.get(model).get(display)
     } catch (e) {
-      available = false;
+      ready = false;
     }
 
-    console.log("Available?", available)
-
     return (
-      available
+      ready
       ?
       React.createElement(
         loaded.get(model).get(display),
@@ -61,10 +55,6 @@ var loadDisplays = (model) => {
 
       displays.forEach(display => {
         views[display] = () => render(self, model.name, display)
-
-        // Object.defineProperty(views, display, {
-        //   get: function() { return render(self, model.name, display) }
-        // })
       })
 
       return views

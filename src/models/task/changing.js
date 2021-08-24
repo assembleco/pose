@@ -6,8 +6,6 @@ import { Icon } from "@iconify/react"
 export default observer(({ self }) => {
   return (
     <div>
-    aaa
-    {/*
       <input
         type="checkbox"
         checked={self.done}
@@ -38,7 +36,6 @@ export default observer(({ self }) => {
         icon="iconoir:cancel"
         onClick={self.cancel}
       />
-      */}
     </div>
   )
 })
