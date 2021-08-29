@@ -8,7 +8,11 @@ var changeable = (base_model, change_display) => {
     .model({ _change: types.maybeNull(base_model) })
     .actions(self => ({
       change: () => {
-        applySnapshot(self, { ...getSnapshot(self), _change: getSnapshot(self) })
+        applySnapshot(self, {
+          ...getSnapshot(self),
+          _change: getSnapshot(self),
+          _display: 'changing',
+        })
       },
       record: () => {
         applySnapshot(self, getSnapshot(self._change))
@@ -40,11 +44,7 @@ onPatch(window.model, patch => {
 function App() {
   return (
     <>
-      {window.model.tasks.map(task =>
-        task._change
-        ? task.changing()
-        : task.display()
-      )}
+      {window.model.tasks.map(task => task.display())}
     </>
   );
 }
