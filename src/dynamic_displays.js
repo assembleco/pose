@@ -49,13 +49,15 @@ var loadDisplays = (model) => {
   displays.forEach((display) => loadDisplay(model.name, display));
 
   var displayable = types
-    .model({})
+    .model({ _display: 'primary' })
     .views(self => {
       var views = {}
 
       displays.forEach(display => {
         views[display] = () => render(self, model.name, display)
       })
+
+      views.display = () => self[self._display]()
 
       return views
     })
