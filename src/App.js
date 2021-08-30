@@ -1,34 +1,11 @@
-import { types, onPatch, applySnapshot, getSnapshot } from "mobx-state-tree"
+import { types, onPatch } from "mobx-state-tree"
 import { observer } from "mobx-react"
 
+import changeable from "./change"
 import Task from "./models/task"
 
-var changeable = (base_model, change_display) => {
-  var cloned_model = types
-    .model({ _change: types.maybeNull(base_model) })
-    .actions(self => ({
-      change: () => {
-        applySnapshot(self, {
-          ...getSnapshot(self),
-          _change: getSnapshot(self),
-          _display: 'changing',
-        })
-      },
-      record: () => {
-        applySnapshot(self, getSnapshot(self._change))
-      },
-      cancel: () => {
-        applySnapshot(self, { ...getSnapshot(self), _change: null })
-      }
-    }))
-
-  var composed = types.compose(base_model, cloned_model)
-
-  return composed
-}
-
 var Program = types.model({
-  tasks: types.array(changeable(Task, "change")),
+  tasks: types.array(changeable(Task, "changing")),
 })
 
 window.model = Program.create({
