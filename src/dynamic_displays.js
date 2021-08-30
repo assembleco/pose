@@ -1,7 +1,7 @@
 import React from 'react';
-import { types } from "mobx-state-tree"
+import { types, getSnapshot } from "mobx-state-tree"
 import { observable } from 'mobx';
-import { Observer } from "mobx-react"
+import { Observer, observer } from "mobx-react"
 import loadable from "@loadable/component"
 
 const loaded = observable.map({});
@@ -57,12 +57,29 @@ var loadDisplays = (model) => {
         views[display] = () => render(self, model.name, display)
       })
 
-      views.display = () => self[self._display]()
+      views.display = () => {
+        if(typeof(self[self._display]) === 'function')
+          return self[self._display]()
+        else
+          return (
+            <NoDisplay
+              self={self}
+              key={`${self.$treenode.path}:no_display`}
+            />
+          )
+      }
 
       return views
     })
 
   return types.compose(model, displayable)
 };
+
+var NoDisplay = observer(({ self }) => (
+  <>
+  No display: {self._display}.<br/>
+  Model:<pre>{JSON.stringify(getSnapshot(self))}</pre>
+  </>
+))
 
 export default loadDisplays
