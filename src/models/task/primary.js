@@ -1,7 +1,8 @@
 import React from "react"
 import { observer } from "mobx-react"
-import { applyPatch } from "mobx-state-tree"
 import { Icon } from "@iconify/react"
+
+import replace from "../../replace"
 
 export default observer(({ self }) => {
   return (
@@ -9,11 +10,7 @@ export default observer(({ self }) => {
       <input
         type="checkbox"
         checked={self.done}
-        onChange={(e) => applyPatch(self, {
-          op: "replace",
-          path: `./done`,
-          value: !self.done,
-        })}
+        onChange={(e) => replace(self, './done', !self.done)}
       />
 
       {self.label}
