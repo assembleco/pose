@@ -3,29 +3,36 @@ import { types, onPatch } from "mobx-state-tree"
 import { Observer, observer } from "mobx-react"
 
 import replace from "./replace"
-import changeable from "./change"
 import Task from "./models/task"
 
 var Program = types.model({
-  tasks: types.array(changeable(Task, "changing")),
+  _chosen: types.maybeNull(types.reference(Task)),
+  tasks: types.array(Task),
 })
+  .views(self => ({
+    get program() {
+      if(self._chosen)
+        return "pending."
+      else
+        return null
+    }
+  }))
 
 window.model = Program.create({
-  _chosen: types.maybe(types.reference(Task)),
   tasks: [
-    { label: "Have dinner", done: true },
+    { key: Math.random(), label: "Have dinner", done: true },
   ],
 })
 
 document.addEventListener('keydown', (e) => {
   if(e.code === "Space") {
-    replace(window.model, './_chosen', window.model.tasks[0])
+    replace(window.model, './_chosen', window.model.tasks[0].key)
   }
 })
 
 document.addEventListener('keyup', (e) => {
   if(e.code === "Space") {
-    replace(window.model, './_chosen', undefined)
+    replace(window.model, './_chosen', null)
   }
 })
 
@@ -40,10 +47,7 @@ function App() {
 
       <Observer>{() => (
         <Sidebar>
-          {window.model._chosen
-            &&
-            <>Hello</>
-          }
+          {window.model.program}
         </Sidebar>
       )}</Observer>
     </>
