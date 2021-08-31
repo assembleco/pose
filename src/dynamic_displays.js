@@ -1,10 +1,15 @@
 import React from 'react';
+import styled from "styled-components"
 import { types, getSnapshot } from "mobx-state-tree"
 import { observable } from 'mobx';
 import { Observer, observer } from "mobx-react"
 import loadable from "@loadable/component"
 
+import replace from "./replace"
+
 const loaded = observable.map({});
+
+var choose = observable.box(false)
 
 const loadDisplay = (model, display) => {
   var Component = loadable(() => import(`./models/${model}/${display}`))
@@ -58,8 +63,19 @@ var loadDisplays = (model) => {
       })
 
       views.display = () => {
-        if(typeof(self[self._display]) === 'function')
-          return self[self._display]()
+        if(typeof(self[self._display]) === 'function') {
+          if(choose.get())
+            return (
+              <Choose
+                key={`${self.$treenode.path}:choose`}
+                onClick={() => replace(window.model, './_chosen', self.key) }
+              >
+                {self[self._display]()}
+              </Choose>
+            )
+          else
+            return self[self._display]()
+        }
         else
           return (
             <NoDisplay
@@ -81,5 +97,22 @@ var NoDisplay = observer(({ self }) => (
   Model:<pre>{JSON.stringify(getSnapshot(self))}</pre>
   </>
 ))
+
+var Choose = styled.div`
+border: 1px solid black;
+display: inline-block;
+`
+
+document.addEventListener('keydown', (e) => {
+  if(e.code === "Space") {
+    choose.set(true)
+  }
+})
+
+document.addEventListener('keyup', (e) => {
+  if(e.code === "Space") {
+    choose.set(false)
+  }
+})
 
 export default loadDisplays

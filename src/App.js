@@ -2,7 +2,6 @@ import styled from "styled-components"
 import { types, onPatch } from "mobx-state-tree"
 import { Observer, observer } from "mobx-react"
 
-import replace from "./replace"
 import Task from "./models/task"
 
 var cache = null
@@ -24,18 +23,6 @@ window.model = Program.create({
   tasks: [
     { key: Math.random(), label: "Have dinner", done: true },
   ],
-})
-
-document.addEventListener('keydown', (e) => {
-  if(e.code === "Space") {
-    replace(window.model, './_chosen', window.model.tasks[0].key)
-  }
-})
-
-document.addEventListener('keyup', (e) => {
-  if(e.code === "Space") {
-    replace(window.model, './_chosen', null)
-  }
 })
 
 onPatch(window.model, patch => {
