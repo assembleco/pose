@@ -1,3 +1,4 @@
+import styled from "styled-components"
 import { types, onPatch } from "mobx-state-tree"
 import { observer } from "mobx-react"
 
@@ -22,8 +23,21 @@ function App() {
   return (
     <>
       {window.model.tasks.map(task => task.display())}
+
+      <Sidebar>
+
+      </Sidebar>
     </>
   );
 }
+
+var Sidebar = styled.div`
+position: absolute;
+top: 0;
+right: 0;
+width: 20rem;
+height: 10rem;
+border: 1px solid black;
+`
 
 export default observer(App);
