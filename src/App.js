@@ -5,6 +5,8 @@ import { Observer, observer } from "mobx-react"
 import replace from "./replace"
 import Task from "./models/task"
 
+var cache = null
+
 var Program = types.model({
   _chosen: types.maybeNull(types.reference(Task)),
   tasks: types.array(Task),
