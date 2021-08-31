@@ -1,7 +1,8 @@
 import styled from "styled-components"
 import { types, onPatch } from "mobx-state-tree"
-import { observer } from "mobx-react"
+import { Observer, observer } from "mobx-react"
 
+import replace from "./replace"
 import changeable from "./change"
 import Task from "./models/task"
 
@@ -10,9 +11,22 @@ var Program = types.model({
 })
 
 window.model = Program.create({
+  _chosen: types.maybe(types.reference(Task)),
   tasks: [
     { label: "Have dinner", done: true },
   ],
+})
+
+document.addEventListener('keydown', (e) => {
+  if(e.code === "Space") {
+    replace(window.model, './_chosen', window.model.tasks[0])
+  }
+})
+
+document.addEventListener('keyup', (e) => {
+  if(e.code === "Space") {
+    replace(window.model, './_chosen', undefined)
+  }
 })
 
 onPatch(window.model, patch => {
@@ -24,9 +38,14 @@ function App() {
     <>
       {window.model.tasks.map(task => task.display())}
 
-      <Sidebar>
-
-      </Sidebar>
+      <Observer>{() => (
+        <Sidebar>
+          {window.model._chosen
+            &&
+            <>Hello</>
+          }
+        </Sidebar>
+      )}</Observer>
     </>
   );
 }
