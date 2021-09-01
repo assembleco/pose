@@ -68,7 +68,10 @@ var loadDisplays = (model) => {
             return (
               <Choose
                 key={`${self.$treenode.path}:choose`}
-                onClick={() => window.model.choose(self.key) }
+                onClick={(e) => {
+                  e.stopPropagation()
+                  window.model.choose(self.key)
+                }}
               >
                 {self[self._display]()}
               </Choose>
