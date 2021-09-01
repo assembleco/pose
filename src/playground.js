@@ -28,7 +28,7 @@ class Playground extends React.Component {
 }
 
 var Area = styled.textarea`
-height: ${({ lines }) => lines * 1.1 }em;
+height: ${({ lines }) => lines * 1.15 }em;
 width: 100%;
 `
 
