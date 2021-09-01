@@ -23,6 +23,9 @@ class Playground extends React.Component {
         value={this.state.value}
         onChange={e => this.setState({ value: e.target.value })}
       />
+      <Clickable onClick={() => this.props.onRecord(this.state.value)} >
+        Record and Reload
+      </Clickable>
     </>
   )
 }
@@ -30,6 +33,14 @@ class Playground extends React.Component {
 var Area = styled.textarea`
 height: ${({ lines }) => lines * 1.15 }em;
 width: 100%;
+`
+
+var Clickable = styled.button`
+display: block;
+color: #fffefe;
+background: #6fa7ec;
+border-radius: 0.8rem;
+height: 1.6rem;
 `
 
 export default observer(Playground)
