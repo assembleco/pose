@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components"
 import { types, getSnapshot } from "mobx-state-tree"
-import { observable } from 'mobx';
+import { observable, runInAction } from 'mobx';
 import { Observer, observer } from "mobx-react"
 import loadable from "@loadable/component"
 
@@ -106,13 +106,13 @@ display: inline-block;
 document.addEventListener('keydown', (e) => {
   if(e.code === "Space") {
     e.preventDefault()
-    choose.set(true)
+    runInAction(() => choose.set(true))
   }
 })
 
 document.addEventListener('keyup', (e) => {
   if(e.code === "Space") {
-    choose.set(false)
+    runInAction(() => choose.set(false))
   }
 })
 
