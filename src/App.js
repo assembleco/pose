@@ -54,7 +54,6 @@ position: absolute;
 top: 0;
 right: 0;
 width: 20rem;
-height: 10rem;
 border: 1px solid black;
 `
 
