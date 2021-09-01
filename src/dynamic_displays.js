@@ -105,6 +105,7 @@ display: inline-block;
 
 document.addEventListener('keydown', (e) => {
   if(e.code === "Space") {
+    e.preventDefault()
     choose.set(true)
   }
 })
