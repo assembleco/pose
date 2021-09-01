@@ -4,6 +4,8 @@ import { types, onPatch } from "mobx-state-tree"
 import { Observer, observer } from "mobx-react"
 
 import Task from "./models/task"
+import Playground from "./playground"
+import { push } from "./core"
 
 var cache = observable.box(null)
 
@@ -42,7 +44,21 @@ function App() {
 
       <Observer>{() => (
         <Sidebar>
-          {cache.get()}
+          <Playground
+            begin={cache.get()}
+            onRecord={(value) => {
+              var model = window.model._chosen.$treenode.type.name
+              var display = window.model._chosen._display
+              var address = `src/models/${model}/${display}.js`
+
+              push(
+                `http://${process.env.REACT_APP_HIERARCH_ADDRESS}/upgrade`,
+                { address, upgrades: [
+                  { begin: 0, end: cache.get().length, grade: value }
+                ] },
+              ).then(() => window.model.choose(window.model._chosen.key))
+            }}
+          />
         </Sidebar>
       )}</Observer>
     </>
@@ -53,7 +69,7 @@ var Sidebar = styled.pre`
 position: absolute;
 top: 0;
 right: 0;
-width: 20rem;
+width: 40rem;
 border: 1px solid black;
 `
 
