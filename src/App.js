@@ -7,12 +7,6 @@ import Task from "./models/task"
 
 var cache = observable.box(null)
 
-autorun(() => {
-  console.log("Cache:", cache.get())
-})
-
-console.log(process.env.REACT_APP_HIERARCH_ADDRESS)
-
 var Program = types.model({
   _chosen: types.maybeNull(types.reference(Task)),
   tasks: types.array(Task),
@@ -21,8 +15,9 @@ var Program = types.model({
     choose: (key) => {
       self._chosen = key
 
-      // TODO change
-      var address = 'src/models/task/primary.js'
+      var model = self._chosen.$treenode.type.name
+      var display = self._chosen._display
+      var address = `src/models/${model}/${display}.js`
 
       fetch(`http://${process.env.REACT_APP_HIERARCH_ADDRESS}/source?address=${address}`)
       .then(response => response.text())

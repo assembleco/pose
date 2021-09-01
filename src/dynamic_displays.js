@@ -88,7 +88,7 @@ var loadDisplays = (model) => {
       return views
     })
 
-  return types.compose(model, displayable)
+  return types.compose(model.name, model, displayable)
 };
 
 var NoDisplay = observer(({ self }) => (

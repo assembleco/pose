@@ -19,7 +19,7 @@ var changeable = (base_model, change_display) => {
       }
     }))
 
-  return types.compose(base_model, cloned_model)
+  return types.compose(base_model.name, base_model, cloned_model)
 }
 
 export default changeable
