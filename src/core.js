@@ -8,7 +8,7 @@ export function push(path, body, method="POST") {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").content,
+      // 'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").content,
       // 'Authorization': localStorage.getItem("code"),
     },
     body: JSON.stringify(body),
