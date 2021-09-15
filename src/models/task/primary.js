@@ -4,20 +4,20 @@ import { Icon } from "@iconify/react"
 
 import replace from "../../replace"
 
-export default observer(({ self }) => {
+export default observer(({ model }) => {
   return (
     <div>
       <input
         type="checkbox"
-        checked={self.done}
-        onChange={(e) => replace(self, './done', !self.done)}
+        checked={model.done}
+        onChange={(e) => replace(model, './done', !model.done)}
       />
 
-      {self.label}
+      {model.label}
 
       <Icon
         icon="ci:edit"
-        onClick={self.change}
+        onClick={model.change}
       />
     </div>
   )

@@ -32,7 +32,7 @@ const render = (self, model, display) => (
       ?
       React.createElement(
         loaded.get(model).get(display),
-        { self, key: `${self.$treenode.path}:${display}` },
+        { model: self, key: `${self.$treenode.path}:${display}` },
       )
 
       : null

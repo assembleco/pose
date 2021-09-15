@@ -4,30 +4,30 @@ import { Icon } from "@iconify/react"
 
 import replace from "../../replace"
 
-export default observer(({ self }) => {
+export default observer(({ model }) => {
   return (
     <div>
       <input
         type="checkbox"
-        checked={self.done}
-        onChange={(e) => replace(self, './done', !self.done)}
+        checked={model.done}
+        onChange={(e) => replace(model, './done', !model.done)}
       />
 
       <input
         type="text"
-        value={self._change.label}
-        onChange={(e) => replace(self, './_change/label', e.target.value)}
-        onKeyDown={(e) => { if(e.key === "Enter") self.record() }}
+        value={model._change.label}
+        onChange={(e) => replace(model, './_change/label', e.target.value)}
+        onKeyDown={(e) => { if(e.key === "Enter") model.record() }}
       />
 
       <Icon
         icon="ci:check"
-        onClick={self.record}
+        onClick={model.record}
       />
 
       <Icon
         icon="iconoir:cancel"
-        onClick={self.cancel}
+        onClick={model.cancel}
       />
     </div>
   )
