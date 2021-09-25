@@ -29,7 +29,7 @@ var Program = types.model({
 
 window.model = Program.create({
   tasks: [
-    { key: Math.random(), label: "Have dinner", done: true },
+    { key: Math.random(), label: "Make dinner", done: 'no' },
   ],
 })
 
