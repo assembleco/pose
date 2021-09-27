@@ -3,15 +3,15 @@ import { autorun, observable, runInAction } from "mobx"
 import { types, onPatch } from "mobx-state-tree"
 import { Observer, observer } from "mobx-react"
 
-import Task from "./models/task"
+import Goal from "./models/goal"
 import Playground from "./playground"
 import { push } from "./core"
 
 var cache = observable.box(null)
 
 var Program = types.model({
-  _chosen: types.maybeNull(types.reference(Task)),
-  tasks: types.array(Task),
+  _chosen: types.maybeNull(types.reference(Goal)),
+  goals: types.array(Goal),
 })
   .actions(self => ({
     choose: (key) => {
@@ -28,7 +28,7 @@ var Program = types.model({
   }))
 
 window.model = Program.create({
-  tasks: [
+  goals: [
     { key: Math.random(), label: "Make dinner", done: 'no' },
   ],
 })
@@ -40,7 +40,7 @@ onPatch(window.model, patch => {
 function App() {
   return (
     <>
-      {window.model.tasks.map(task => task.display())}
+      {window.model.goals.map(goal => goal.display())}
 
       <Observer>{() => (
         <Sidebar>

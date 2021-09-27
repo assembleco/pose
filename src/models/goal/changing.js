@@ -9,8 +9,13 @@ export default observer(({ model }) => {
     <div>
       <input
         type="checkbox"
-        checked={model.done}
-        onChange={(e) => replace(model, './done', !model.done)}
+        checked={model.done === 'yes'}
+        onChange={(e) => replace(model, './done',
+          model.done === 'yes'
+          ? 'no'
+          : 'yes'
+        )}
+)}
       />
 
       <input
