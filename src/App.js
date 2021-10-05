@@ -3,15 +3,18 @@ import { autorun, observable, runInAction } from "mobx"
 import { types, onPatch } from "mobx-state-tree"
 import { Observer, observer } from "mobx-react"
 
-import Task from "./models/task"
+import Hao from "./models/hao"
+import Page from "./models/page"
+
 import Playground from "./playground"
 import { push } from "./core"
 
+var Schema = types
 var cache = observable.box(null)
 
-var Program = types.model({
-  _chosen: types.maybeNull(types.reference(Task)),
-  tasks: types.array(Task),
+var Program = Schema.model({
+  hao: Hao,
+  page: Page,
 })
   .actions(self => ({
     choose: (key) => {
@@ -28,9 +31,8 @@ var Program = types.model({
   }))
 
 window.model = Program.create({
-  tasks: [
-    { key: Math.random(), label: "Make dinner", done: 'no' },
-  ],
+  hao: {},
+  page: { blocks: [] },
 })
 
 onPatch(window.model, patch => {
@@ -40,7 +42,7 @@ onPatch(window.model, patch => {
 function App() {
   return (
     <>
-      {window.model.tasks.map(task => task.display())}
+      {window.model.page.blocks.map(block => block.display())}
 
       <Observer>{() => (
         <Sidebar>

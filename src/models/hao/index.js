@@ -1,7 +1,11 @@
 // Only keep measure basename in [codebase]
 
-import { types: Schema } from "mobx-state-tree
-import { Page } from "../page"
+import { types } from "mobx-state-tree"
+import Page from "../page"
+import changeable from "../../change"
+import loadDisplays from "../../dynamic_displays"
+
+var Schema = types
 
 // `Model` is ...
 var Model =
@@ -9,3 +13,5 @@ var Model =
     {
       pages: Schema.array(Page),
     })
+
+export default changeable(loadDisplays(Model), 'changing')
