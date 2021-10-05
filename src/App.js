@@ -30,9 +30,13 @@ var Program = Schema.model({
     }
   }))
 
-window.model = Program.create({
+Program.make = Program.create
+
+window.model = Program.make({
   hao: {},
-  page: { blocks: [] },
+  page: { blocks: [
+    { name: 'begin', code: 'Hello', parser: 'plain' }
+  ] },
 })
 
 onPatch(window.model, patch => {
