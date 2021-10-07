@@ -1,5 +1,5 @@
 # Pose
 
-### `yarn`
-### `yarn go`
-### `node hierarch`
+- `yarn`
+- `node hierarch &`
+- `yarn go`
