@@ -4,7 +4,7 @@ import { types, onPatch } from "mobx-state-tree"
 import { Observer, observer } from "mobx-react"
 
 import Hao from "./models/hao"
-import Page from "./models/page"
+import Record from "./models/record"
 
 import Playground from "./playground"
 import { push } from "./core"
@@ -14,7 +14,7 @@ var cache = observable.box(null)
 
 var Program = Schema.model({
   hao: Hao,
-  page: Page,
+  record: Record,
 })
   .actions(self => ({
     choose: (key) => {
@@ -32,11 +32,17 @@ var Program = Schema.model({
 
 Program.make = Program.create
 
+var record_key = Math.random()
 window.model = Program.make({
   hao: {},
-  page: { blocks: [
-    { name: 'begin', code: 'Hello', parser: 'plain' }
-  ] },
+  record: {
+    key: record_key,
+    pages: [ {
+      record: record_key,
+      key: Math.random(),
+      blocks: [ { name: 'begin', code: 'Hello', parser: 'plain' } ]
+    } ]
+  }
 })
 
 onPatch(window.model, patch => {
@@ -46,7 +52,8 @@ onPatch(window.model, patch => {
 function App() {
   return (
     <>
-      {window.model.page.blocks.map(block => block.display())}
+      {window.model.record.display()}
+    {/*.blocks.map(block => block.display())*/}
 
       <Observer>{() => (
         <Sidebar>

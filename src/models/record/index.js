@@ -13,7 +13,7 @@ var Schema = types
 var Model =
   Schema.model('Record',
     {
-      pages: Schema.array(Page),
+      pages: Schema.array(Schema.late(() => Page)),
     })
 
 export default changeable(loadDisplays(Model), 'changing')
