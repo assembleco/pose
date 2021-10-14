@@ -95,11 +95,17 @@ var loadDisplays = (model) => {
 };
 
 var NoDisplay = observer(({ self }) => (
-  <>
+  <Red>
   No display: {self._display}.<br/>
   Model:<pre>{JSON.stringify(getSnapshot(self))}</pre>
-  </>
+  </Red>
 ))
+
+var Red = styled.div`
+  border: 2px solid red;
+  color: red;
+  background: #aa000066;
+`
 
 var Choose = styled.div`
 border: 1px solid black;
