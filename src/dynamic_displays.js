@@ -102,9 +102,10 @@ var NoDisplay = observer(({ self }) => (
 ))
 
 var Red = styled.div`
-  border: 2px solid red;
-  color: red;
-  background: #aa000066;
+  border: 2px solid #c91515;
+  color: #c91515;
+  background: #edb1b1;
+  width: 40vw;
 `
 
 var Choose = styled.div`
