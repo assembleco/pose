@@ -51,7 +51,7 @@ onPatch(window.model, patch => {
 
 function App() {
   return (
-    <>
+    <Color>
       {window.model.record.display()}
     {/*.blocks.map(block => block.display())*/}
 
@@ -74,9 +74,15 @@ function App() {
           />
         </Sidebar>
       )}</Observer>
-    </>
+    </Color>
   );
 }
+
+var Color = styled.div`
+background: #f8f6bb;
+height: 100vh;
+width: 100vw;
+`
 
 var Sidebar = styled.pre`
 position: absolute;
