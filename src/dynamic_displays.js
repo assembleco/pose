@@ -49,6 +49,7 @@ var loadDisplays = (model) => {
     .filter((file) => file !== 'index')
     .filter((module) => module !== null);
 
+  console.log("Loading displays", displays)
   displays.forEach((display) => loadDisplay(model.name, display));
 
   var displayable = types
