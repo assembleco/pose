@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { autorun, observable, runInAction } from "mobx"
+import { observable, runInAction } from "mobx"
 import { types, onPatch } from "mobx-state-tree"
 import { Observer, observer } from "mobx-react"
 

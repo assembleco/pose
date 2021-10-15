@@ -5,8 +5,6 @@ import { observable, runInAction } from 'mobx';
 import { Observer, observer } from "mobx-react"
 import loadable from "@loadable/component"
 
-import replace from "./replace"
-
 const loaded = observable.map({});
 
 var choose = observable.box(false)

@@ -2,7 +2,6 @@
 
 import { types } from "mobx-state-tree"
 
-import Block from "../block"
 import Page from "../page"
 
 import changeable from "../../change"
