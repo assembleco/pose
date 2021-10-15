@@ -10,7 +10,7 @@ const loaded = observable.map({});
 var choose = observable.box(false)
 
 const loadDisplay = (model, display) => {
-  var Component = loadable(() => import(`./models/${model}/${display}`))
+  var Component = loadable(() => import(`./models/${snake_case(model)}/displays/${display}`))
 
   if (!loaded.get(model)) loaded.set(model, observable.map({}))
   loaded.get(model).set(display, Component)
@@ -38,18 +38,24 @@ const render = (self, model, display) => (
   }}</Observer>
 )
 
+function snake_case(str) {
+  return str && str.match(
+    /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+    .map(s => s.toLowerCase())
+    .join('_');
+}
+
 var loadDisplays = (model) => {
   const displays = require
     .context('./models/', true, /\.js$/)
     .keys()
     .map((file) => {
-      const module = new RegExp(`^./${model.name}/(.+).js$`).exec(file);
+      const module = new RegExp(`^./${snake_case(model.name)}/displays/(.+).js$`).exec(file);
       return module && module[1];
     })
     .filter((file) => file !== 'index')
     .filter((module) => module !== null);
 
-  console.log("Loading displays", displays)
   displays.forEach((display) => loadDisplay(model.name, display));
 
   var displayable = types
