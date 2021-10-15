@@ -96,8 +96,8 @@ var loadDisplays = (model) => {
 
 var NoDisplay = observer(({ self }) => (
   <Red>
-  No display: {self._display}.<br/>
-  Model:<pre>{JSON.stringify(getSnapshot(self))}</pre>
+  No display: {self.$treenode.type.name}:{self._display}.<br/>
+  Model:<pre>{JSON.stringify(getSnapshot(self), null, 2)}</pre>
   </Red>
 ))
 
