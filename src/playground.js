@@ -20,7 +20,7 @@ class Playground extends React.Component {
     <>
       <Area
         lines={(this.state.value || '').split(/\r\n|\r|\n/).length}
-        value={this.state.value}
+        value={this.state.value || ''}
         onChange={e => this.setState({ value: e.target.value })}
         onKeyDown={e => {
           if(e.code === "Space")
