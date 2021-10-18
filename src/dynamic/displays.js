@@ -10,7 +10,7 @@ const loaded = observable.map({});
 var choose = observable.box(false)
 
 const loadDisplay = (model, display) => {
-  var Component = loadable(() => import(`./models/${model}/${display}`))
+  var Component = loadable(() => import(`../models/${snake_case(model)}/displays/${display}`))
 
   if (!loaded.get(model)) loaded.set(model, observable.map({}))
   loaded.get(model).set(display, Component)
@@ -19,8 +19,11 @@ const loadDisplay = (model, display) => {
 const render = (self, model, display) => (
   <Observer>{() => {
     var ready = false;
-    try { ready = loaded.get(model).get(display) }
-    catch (e) { ready = false }
+    try {
+      ready = loaded.get(model).get(display)
+    } catch (e) {
+      ready = false;
+    }
 
     return (
       ready
@@ -35,12 +38,19 @@ const render = (self, model, display) => (
   }}</Observer>
 )
 
+var snake_case = (str) => (
+  str && str
+  .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+  .map(s => s.toLowerCase())
+  .join('_')
+)
+
 var loadDisplays = (model) => {
   const displays = require
-    .context('./models/', true, /\.js$/)
+    .context('../models/', true, /\.js$/)
     .keys()
     .map((file) => {
-      const module = new RegExp(`^./${model.name}/(.+).js$`).exec(file);
+      const module = new RegExp(`^./${snake_case(model.name)}/displays/(.+).js$`).exec(file);
       return module && module[1];
     })
     .filter((file) => file !== 'index')
@@ -90,11 +100,18 @@ var loadDisplays = (model) => {
 };
 
 var NoDisplay = observer(({ self }) => (
-  <>
-  No display: {self._display}.<br/>
-  Model:<pre>{JSON.stringify(getSnapshot(self))}</pre>
-  </>
+  <Red>
+  No display: {self.$treenode.type.name}:{self._display}.<br/>
+  Model:<pre>{JSON.stringify(getSnapshot(self), null, 2)}</pre>
+  </Red>
 ))
+
+var Red = styled.div`
+  border: 2px solid #c91515;
+  color: #c91515;
+  background: #edb1b1;
+  width: 40vw;
+`
 
 var Choose = styled.div`
 border: 1px solid black;

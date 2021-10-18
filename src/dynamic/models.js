@@ -4,19 +4,17 @@ import { types, getSnapshot, applySnapshot } from "mobx-state-tree"
 import { observable, runInAction } from 'mobx';
 import { Observer, observer } from "mobx-react"
 
-import replace from "./replace"
-
 const loaded = observable.map({});
 
 var choose = observable.box(false)
 
 const loadModel = (model_name) => {
-  var model = import(`./models/${model_name}`)
+  var model = import(`../models/${model_name}`)
 
   loaded.set(model_name, model)
 };
 
-const realize = (self, model, base = {}) => (
+const realize = (self, model, base = {}) => {
   var ready = false;
   try { ready = loaded.get(model) }
   catch (e) { ready = false }
@@ -26,11 +24,11 @@ const realize = (self, model, base = {}) => (
     ? loaded.get(model).base(model, base)
     : null
   )
-)
+}
 
 var loadModels = () => {
   const models = require
-    .context('./models/', true, /\.js$/)
+    .context('../models/', true, /\.js$/)
     .keys()
     .map((file) => {
       const module = new RegExp(`^./(.+)/index.js$`).exec(file);
@@ -40,15 +38,17 @@ var loadModels = () => {
 
   models.forEach((model) => loadModel(model));
 
+  /*
   var riggable = types
     .model({ _rig: 'primary' })
     .actions(self => ({
-      var base = (base) => {
+      base: (base) => {
         return applySnapshot(self, base)
       }
     }))
 
   return types.compose(model, model, riggable)
+  */
 };
 
 document.addEventListener('keydown', (e) => {

@@ -7,7 +7,7 @@ import Goal from "./models/goal"
 import Playground from "./playground"
 import { push } from "./core"
 
-import loadModels from "../../dynamic/models"
+import loadModels from "./dynamic/models"
 loadModels()
 
 var cache = observable.box(null)
