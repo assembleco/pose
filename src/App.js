@@ -5,6 +5,7 @@ import { Observer, observer } from "mobx-react"
 
 import Hao from "./models/hao"
 import Record from "./models/record"
+import Queue from "./models/queue"
 
 import Playground from "./playground"
 import { push } from "./core"
@@ -15,6 +16,7 @@ var cache = observable.box(null)
 var Program = Schema.model({
   hao: Hao,
   record: Record,
+  queue: Queue,
 })
   .actions(self => ({
     choose: (key) => {
@@ -34,6 +36,7 @@ Program.make = Program.create
 
 var record_key = Math.random()
 window.model = Program.make({
+  queue: { key: Math.random(), source: 'https://twitter.com/AssembleCompany/' },
   hao: {},
   record: {
     key: record_key,
