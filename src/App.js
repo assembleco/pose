@@ -2,6 +2,7 @@ import styled from "styled-components"
 import { observable, runInAction } from "mobx"
 import { types, onPatch } from "mobx-state-tree"
 import { Observer, observer } from "mobx-react"
+import makeInspectable from 'mobx-devtools-mst';
 
 import Hao from "./models/hao"
 import Record from "./models/record"
@@ -32,6 +33,8 @@ window.model = Program.make({
     // } ]
   // }
 })
+
+makeInspectable(window.model)
 
 onPatch(window.model, patch => {
   console.info("Processing change: ", patch)
