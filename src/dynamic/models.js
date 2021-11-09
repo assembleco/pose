@@ -1,8 +1,5 @@
-import React from 'react';
-import styled from "styled-components"
-import { types, getSnapshot, applySnapshot } from "mobx-state-tree"
+// import { types, getSnapshot, applySnapshot } from "mobx-state-tree"
 import { observable, runInAction } from 'mobx';
-import { Observer, observer } from "mobx-react"
 
 const loaded = observable.map({});
 
@@ -13,18 +10,6 @@ const loadModel = (model_name) => {
 
   loaded.set(model_name, model)
 };
-
-const realize = (self, model, base = {}) => {
-  var ready = false;
-  try { ready = loaded.get(model) }
-  catch (e) { ready = false }
-
-  return (
-    ready
-    ? loaded.get(model).base(model, base)
-    : null
-  )
-}
 
 var loadModels = () => {
   const models = require

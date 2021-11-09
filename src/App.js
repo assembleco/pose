@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { autorun, observable, runInAction } from "mobx"
+import { observable, runInAction } from "mobx"
 import { types, onPatch } from "mobx-state-tree"
 import { Observer, observer } from "mobx-react"
 
@@ -22,11 +22,8 @@ var Program = types.model({
 
       var model = self._chosen.$treenode.type.name
       var display = self._chosen._display
-      var address = `src/models/${model}/${display}.js`
-
-      fetch(`http://${process.env.REACT_APP_HIERARCH_ADDRESS}/source?address=${address}`)
-      .then(response => response.text())
-      .then(response => runInAction(() => cache.set(response)))
+      var address = `src/models/${model}/displays/${display}.js`
+      runInAction(() => cache.set(address))
     }
   }))
 
@@ -48,17 +45,13 @@ function App() {
       <Observer>{() => (
         <Sidebar>
           <Playground
-            begin={cache.get()}
+            address={cache.get()}
             onRecord={(value) => {
-              var model = window.model._chosen.$treenode.type.name
-              var display = window.model._chosen._display
-              var address = `src/models/${model}/${display}.js`
-
               push(
                 `http://${process.env.REACT_APP_HIERARCH_ADDRESS}/upgrade`,
-                { address, upgrades: [
-                  { begin: 0, end: cache.get().length, grade: value }
-                ] },
+                {
+                  address: cache.get(),
+                  upgrades: [ { begin: 0, end: -1, grade: value } ] },
               ).then(() => window.model.choose(window.model._chosen.key))
             }}
           />

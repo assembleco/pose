@@ -12,8 +12,12 @@ class Playground extends React.Component {
     this.setState({ value: p.begin })
   }
 
-  componentWillReceiveProps(p) {
-    this.setState({ value: p.begin })
+  componentDidUpdate(prev) {
+    if(this.props.address && prev.address !== this.props.address) {
+      fetch(`http://${process.env.REACT_APP_HIERARCH_ADDRESS}/source?address=${this.props.address}`)
+      .then(response => response.text())
+      .then(response => this.setState({ value: response }))
+    }
   }
 
   render = () => (
