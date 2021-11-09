@@ -12,8 +12,8 @@ const apply_upgrades = (address, upgrades) => {
 
     upgrades.reverse().forEach(upgrade => {
       program.replace_by_indices(
-        upgrade.begin,
-        upgrade.end,
+        (upgrade.begin + source.length) % source.length,
+        (upgrade.end + source.length) % source.length,
         upgrade.grade,
       )
     })
