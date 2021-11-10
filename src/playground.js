@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react"
+import { push } from "./core"
 
 class Playground extends React.Component {
   state = {
@@ -10,6 +11,8 @@ class Playground extends React.Component {
   constructor(p) {
     super(p)
     this.setState({ value: p.begin })
+
+    this.onRecord = this.onRecord.bind(this)
   }
 
   componentDidUpdate(prev) {
@@ -18,6 +21,16 @@ class Playground extends React.Component {
       .then(response => response.text())
       .then(response => this.setState({ value: response }))
     }
+  }
+
+  onRecord() {
+    push(
+      `http://${process.env.REACT_APP_HIERARCH_ADDRESS}/upgrade`,
+      {
+        address: this.props.address,
+        upgrades: [ { begin: 0, end: -1, grade: this.state.value } ]
+      },
+    )
   }
 
   render = () => (
@@ -31,7 +44,7 @@ class Playground extends React.Component {
             e.stopPropagation()
         }}
       />
-      <Clickable onClick={() => this.props.onRecord(this.state.value)} >
+      <Clickable onClick={this.onRecord} >
         Record and Reload
       </Clickable>
     </>

@@ -5,7 +5,6 @@ import { Observer, observer } from "mobx-react"
 
 import Goal from "./models/goal"
 import Playground from "./playground"
-import { push } from "./core"
 
 import loadModels from "./dynamic/models"
 loadModels()
@@ -29,6 +28,8 @@ var Program = types.model({
 
 window.model = Program.create({
   goals: [
+    { key: Math.random(), label: "Drink coffee", done: 'no' },
+    { key: Math.random(), label: "Go outside", done: 'no' },
     { key: Math.random(), label: "Make dinner", done: 'no' },
   ],
 })
@@ -44,17 +45,7 @@ function App() {
 
       <Observer>{() => (
         <Sidebar>
-          <Playground
-            address={cache.get()}
-            onRecord={(value) => {
-              push(
-                `http://${process.env.REACT_APP_HIERARCH_ADDRESS}/upgrade`,
-                {
-                  address: cache.get(),
-                  upgrades: [ { begin: 0, end: -1, grade: value } ] },
-              ).then(() => window.model.choose(window.model._chosen.key))
-            }}
-          />
+          <Playground address={cache.get()} />
         </Sidebar>
       )}</Observer>
     </>
