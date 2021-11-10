@@ -5,22 +5,24 @@ import { observable, runInAction } from 'mobx';
 import { Observer, observer } from "mobx-react"
 import loadable from "@loadable/component"
 
-const loaded = observable.map({});
+const display_cache = observable.map({});
 
 var choose = observable.box(false)
 
 const loadDisplay = (model, display) => {
   var Component = loadable(() => import(`../models/${snake_case(model)}/displays/${display}`))
 
-  if (!loaded.get(model)) loaded.set(model, observable.map({}))
-  loaded.get(model).set(display, Component)
+  if (!display_cache.get(model))
+    display_cache.set(model, observable.map({}))
+
+  display_cache.get(model).set(display, Component)
 };
 
 const render = (self, model, display) => (
   <Observer>{() => {
     var ready = false;
     try {
-      ready = loaded.get(model).get(display)
+      ready = display_cache.get(model).get(display)
     } catch (e) {
       ready = false;
     }
@@ -29,7 +31,7 @@ const render = (self, model, display) => (
       ready
       ?
       React.createElement(
-        loaded.get(model).get(display),
+        display_cache.get(model).get(display),
         { model: self, key: `${self.$treenode.path}:${display}` },
       )
 
