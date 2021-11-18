@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.12.3",
+    "@codemirror/state": "^0.19.5",
+    "@codemirror/view": "^0.19.19",
     "@iconify/react": "^3.0.1",
     "@loadable/component": "^5.15.0",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
