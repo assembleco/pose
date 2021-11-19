@@ -32,7 +32,7 @@ function App() {
         <Sidebar key="sidebar">
           <Playground
             key="playground"
-            address={window.program._chosen && window.program.chosen.address}
+            address={window.program._chosen && window.program._chosen.address}
           />
         </Sidebar>
       )}</Observer>

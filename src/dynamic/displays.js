@@ -77,7 +77,7 @@ var loadDisplays = (model) => {
                 key={`${self.$treenode.path}:choose`}
                 onClick={(e) => {
                   e.stopPropagation()
-                  window.model.choose(self.key)
+                  window.program.choose(self.key)
                 }}
               >
                 {self[self._display]()}

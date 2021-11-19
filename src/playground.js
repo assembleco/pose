@@ -26,12 +26,12 @@ class Playground extends React.Component {
   }
 
   componentDidMount() {
-    window.playgroundModel = this.playgroundModel
+    // window.playgroundModel = this.playgroundModel
 
-    this.playgroundDisplay = new EditorView({
-      state: this.playgroundModel,
-      parent: this.playgroundNode.current,
-    })
+    // this.playgroundDisplay = new EditorView({
+      // state: this.playgroundModel,
+      // parent: this.playgroundNode.current,
+    // })
   }
 
   componentDidUpdate(prev) {
@@ -48,11 +48,11 @@ class Playground extends React.Component {
       this.setState({ code: response })
 
       console.log(response)
-      this.playgroundModel.update({changes: {
-        from: 0,
-        to: this.playgroundModel.doc.length,
-        insert: response,
-      }})
+      // this.playgroundModel.update({changes: {
+        // from: 0,
+        // to: this.playgroundModel.doc.length,
+        // insert: response,
+      // }})
     })
   }
 
@@ -71,7 +71,7 @@ class Playground extends React.Component {
   render = () => (
     <>
       <div ref={this.playgroundNode} />
-    {/*
+
       <Area
         lines={(this.state.code || '').split(/\r\n|\r|\n/).length}
         value={this.state.code}
@@ -81,7 +81,7 @@ class Playground extends React.Component {
             e.stopPropagation()
         }}
       />
-    */}
+
       <Clickable onClick={this.onRecord} >
         Record and Reload
       </Clickable>
