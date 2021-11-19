@@ -3,12 +3,13 @@ import styled from "styled-components"
 import { observer } from "mobx-react"
 import { push } from "./core"
 
-import {EditorView} from "@codemirror/view"
-import {EditorState} from "@codemirror/state"
+import { EditorView, keymap } from "@codemirror/view"
+import { EditorState, basicSetup } from "@codemirror/basic-setup"
+import { defaultKeymap } from "@codemirror/commands"
 
 class Playground extends React.Component {
   state = {
-    code: null,
+    code: 'hello.',
     errors: [],
   }
 
@@ -18,12 +19,19 @@ class Playground extends React.Component {
     this.onRecord = this.onRecord.bind(this)
     this.grabCode()
 
-    this.playgroundModel = EditorState.create({ doc: this.state.code || '' })
+    // this.playgroundModel = EditorState.create({
+      // doc: this.state.code,
+      // extensions: [basicSetup, keymap.of([defaultKeymap])]
+    // })
+  }
+
+  componentDidMount() {
+    window.playgroundModel = this.playgroundModel
+
     this.playgroundDisplay = new EditorView({
       state: this.playgroundModel,
-      parent: document.body
+      parent: this.playgroundNode.current,
     })
-
   }
 
   componentDidUpdate(prev) {
@@ -38,10 +46,12 @@ class Playground extends React.Component {
     .then(response => response.text())
     .then(response => {
       this.setState({ code: response })
+
+      console.log(response)
       this.playgroundModel.update({changes: {
         from: 0,
         to: this.playgroundModel.doc.length,
-        insert: this.state.code,
+        insert: response,
       }})
     })
   }
@@ -60,8 +70,9 @@ class Playground extends React.Component {
 
   render = () => (
     <>
+      <div ref={this.playgroundNode} />
+    {/*
       <Area
-        ref={this.playgroundNode}
         lines={(this.state.code || '').split(/\r\n|\r|\n/).length}
         value={this.state.code}
         onChange={e => this.setState({ code: e.target.value })}
@@ -70,6 +81,7 @@ class Playground extends React.Component {
             e.stopPropagation()
         }}
       />
+    */}
       <Clickable onClick={this.onRecord} >
         Record and Reload
       </Clickable>

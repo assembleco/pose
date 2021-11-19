@@ -1,9 +1,9 @@
 import styled from "styled-components"
-import { observable, runInAction } from "mobx"
+import { observable } from "mobx"
 import { types, onPatch } from "mobx-state-tree"
 import { Observer, observer } from "mobx-react"
 
-import Goal from "./models/goal"
+import Program from "./models/program"
 import Playground from "./playground"
 
 import loadModels from "./dynamic/models"
@@ -11,22 +11,7 @@ loadModels()
 
 var cache = observable.box(null)
 
-var Program = types.model({
-  _chosen: types.maybeNull(types.reference(Goal)),
-  goals: types.array(Goal),
-})
-  .actions(self => ({
-    choose: (key) => {
-      self._chosen = key
-
-      var model = self._chosen.$treenode.type.name
-      var display = self._chosen._display
-      var address = `src/models/${model}/displays/${display}.js`
-      runInAction(() => cache.set(address))
-    }
-  }))
-
-window.model = Program.create({
+window.program = Program.create({
   goals: [
     { key: Math.random(), label: "Drink coffee", done: 'no' },
     { key: Math.random(), label: "Go outside", done: 'no' },
@@ -34,18 +19,21 @@ window.model = Program.create({
   ],
 })
 
-onPatch(window.model, patch => {
+onPatch(window.program, patch => {
   console.info("Processing change: ", patch)
 })
 
 function App() {
   return (
     <>
-      {window.model.goals.map(goal => goal.display())}
+      {window.program.goals.map(goal => goal.display())}
 
       <Observer>{() => (
-        <Sidebar>
-          <Playground address={cache.get()} />
+        <Sidebar key="sidebar">
+          <Playground
+            key="playground"
+            address={window.program._chosen && window.program.chosen.address}
+          />
         </Sidebar>
       )}</Observer>
     </>
