@@ -9,7 +9,7 @@ import { defaultKeymap } from "@codemirror/commands"
 
 class Playground extends React.Component {
   state = {
-    code: 'hello.',
+    code: '',
     errors: [],
   }
 
@@ -19,19 +19,19 @@ class Playground extends React.Component {
     this.onRecord = this.onRecord.bind(this)
     this.grabCode()
 
-    // this.playgroundModel = EditorState.create({
-      // doc: this.state.code,
-      // extensions: [basicSetup, keymap.of([defaultKeymap])]
-    // })
+    this.playgroundModel = EditorState.create({
+      doc: this.state.code,
+      extensions: []
+    })
+
+    window.playgroundModel = this.playgroundModel
   }
 
   componentDidMount() {
-    // window.playgroundModel = this.playgroundModel
-
-    // this.playgroundDisplay = new EditorView({
-      // state: this.playgroundModel,
-      // parent: this.playgroundNode.current,
-    // })
+    this.playgroundDisplay = new EditorView({
+      state: this.playgroundModel,
+      parent: this.playgroundNode.current,
+    })
   }
 
   componentDidUpdate(prev) {
@@ -47,12 +47,13 @@ class Playground extends React.Component {
     .then(response => {
       this.setState({ code: response })
 
-      console.log(response)
-      // this.playgroundModel.update({changes: {
-        // from: 0,
-        // to: this.playgroundModel.doc.length,
-        // insert: response,
-      // }})
+      var change = this.playgroundModel.update({changes: {
+        from: 0,
+        to: this.playgroundModel.doc.length,
+        insert: response,
+      }})
+
+      if(this.playgroundDisplay) this.playgroundDisplay.dispatch(change)
     })
   }
 
@@ -72,6 +73,7 @@ class Playground extends React.Component {
     <>
       <div ref={this.playgroundNode} />
 
+    {/*
       <Area
         lines={(this.state.code || '').split(/\r\n|\r|\n/).length}
         value={this.state.code}
@@ -81,6 +83,7 @@ class Playground extends React.Component {
             e.stopPropagation()
         }}
       />
+    */}
 
       <Clickable onClick={this.onRecord} >
         Record and Reload
