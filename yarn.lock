@@ -1444,7 +1444,7 @@
     "@codemirror/state" "^0.19.0"
     "@codemirror/view" "^0.19.0"
 
-"@codemirror/gutter@^0.19.0", "@codemirror/gutter@^0.19.4":
+"@codemirror/gutter@^0.19.0", "@codemirror/gutter@^0.19.4", "@codemirror/gutter@^0.19.5":
   version "0.19.5"
   resolved "https://registry.yarnpkg.com/@codemirror/gutter/-/gutter-0.19.5.tgz#b90527832c3f3066d1aeb53b003a764b5a561cfc"
   integrity sha512-Vqy+RXgBdnmbxNYx4/irQcfU9ecFz8SB/vhDOeHHSGtDqs+TihYHnHgBZLz6uILEG0YIjp0/zYY3P2NgZ/iyEg==

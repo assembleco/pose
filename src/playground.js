@@ -4,6 +4,7 @@ import { observer } from "mobx-react"
 import { push } from "./core"
 
 import { EditorView, keymap } from "@codemirror/view"
+import { lineNumbers } from "@codemirror/gutter"
 import { EditorState, basicSetup } from "@codemirror/basic-setup"
 import { defaultKeymap } from "@codemirror/commands"
 
@@ -21,7 +22,7 @@ class Playground extends React.Component {
 
     this.playgroundModel = EditorState.create({
       doc: this.state.code,
-      extensions: []
+      extensions: [/*lineNumbers(), basicSetup, keymap.of(defaultKeymap)*/]
     })
 
     window.playgroundModel = this.playgroundModel
