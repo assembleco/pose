@@ -72,19 +72,9 @@ class Playground extends React.Component {
 
   render = () => (
     <>
-      <div ref={this.playgroundNode} />
-
-    {/*
-      <Area
-        lines={(this.state.code || '').split(/\r\n|\r|\n/).length}
-        value={this.state.code}
-        onChange={e => this.setState({ code: e.target.value })}
-        onKeyDown={e => {
-          if(e.code === "Space")
-            e.stopPropagation()
-        }}
-      />
-    */}
+      <Area lines={(this.state.code || '').split(/\r\n|\r|\n/).length} >
+        <div ref={this.playgroundNode} />
+      </Area>
 
       <Clickable onClick={this.onRecord} >
         Record and Reload
@@ -93,7 +83,7 @@ class Playground extends React.Component {
   )
 }
 
-var Area = styled.textarea`
+var Area = styled.div`
 height: ${({ lines }) => lines * 1.15 }em;
 width: 100%;
 `

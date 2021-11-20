@@ -1,15 +1,13 @@
 import styled from "styled-components"
-import { observable } from "mobx"
-import { types, onPatch } from "mobx-state-tree"
+import { onPatch } from "mobx-state-tree"
 import { Observer, observer } from "mobx-react"
+import { runInAction } from "mobx"
 
 import Program from "./models/program"
 import Playground from "./playground"
 
 import loadModels from "./dynamic/models"
 loadModels()
-
-var cache = observable.box(null)
 
 window.program = Program.create({
   goals: [
@@ -25,18 +23,20 @@ onPatch(window.program, patch => {
 
 function App() {
   return (
-    <>
+    <Page>
       {window.program.goals.map(goal => goal.display())}
 
       <Observer>{() => (
-        <Sidebar key="sidebar">
-          <Playground
-            key="playground"
-            address={window.program._chosen && window.program._chosen.address}
-          />
-        </Sidebar>
+        window.program._chosen
+        ? <Sidebar>
+            <Playground
+            address={window.program._chosen.address}
+            onClose={() => window.program.choose(null)}
+            />
+          </Sidebar>
+        : null
       )}</Observer>
-    </>
+    </Page>
   );
 }
 
@@ -44,8 +44,14 @@ var Sidebar = styled.pre`
 position: absolute;
 top: 0;
 right: 0;
-width: 40rem;
+width: 32rem;
 border: 1px solid black;
+`
+
+var Page = styled.div`
+background: #bbe4c6;
+color: #3d3b11;
+height: 100vh;
 `
 
 export default observer(App);
