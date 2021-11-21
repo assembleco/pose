@@ -1,4 +1,5 @@
 import React from "react"
+import styled from "styled-components"
 import { observer } from "mobx-react"
 import { Icon } from "@iconify/react"
 
@@ -6,7 +7,7 @@ import replace from "../../../replace"
 
 export default observer(({ model }) => {
   return (
-    <div>
+    <Bin>
       <input
         type="checkbox"
         checked={model.done === 'yes'}
@@ -23,6 +24,12 @@ export default observer(({ model }) => {
         icon="ci:edit"
         onClick={model.change}
       />
-    </div>
+    </Bin>
   )
 })
+
+var Bin = styled.div`
+background: #f8f6bb;
+margin: 0.2rem;
+widtH: 12rem;
+`

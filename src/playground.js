@@ -7,10 +7,11 @@ import { EditorView, keymap } from "@codemirror/view"
 import { lineNumbers } from "@codemirror/gutter"
 import { EditorState, basicSetup } from "@codemirror/basic-setup"
 import { defaultKeymap } from "@codemirror/commands"
+import { javascript } from "@codemirror/lang-javascript"
 
 class Playground extends React.Component {
   state = {
-    code: '',
+    code: "'hello'",
     errors: [],
   }
 
@@ -22,7 +23,12 @@ class Playground extends React.Component {
 
     this.playgroundModel = EditorState.create({
       doc: this.state.code,
-      extensions: [/*lineNumbers(), basicSetup, keymap.of(defaultKeymap)*/]
+      extensions: [
+        javascript({ config: { jsx: true } }),
+        lineNumbers(),
+        basicSetup,
+        keymap.of(defaultKeymap)
+      ]
     })
 
     window.playgroundModel = this.playgroundModel
@@ -70,17 +76,19 @@ class Playground extends React.Component {
     )
   }
 
-  render = () => (
-    <>
-      <Area lines={(this.state.code || '').split(/\r\n|\r|\n/).length} >
-        <div ref={this.playgroundNode} />
-      </Area>
+  render() {
+    return (
+      <>
+        <Area lines={(this.state.code || '').split(/\r\n|\r|\n/).length} >
+          <div ref={this.playgroundNode} />
+        </Area>
 
-      <Clickable onClick={this.onRecord} >
-        Record and Reload
-      </Clickable>
-    </>
-  )
+        <Clickable onClick={this.onRecord} >
+          Record and Reload
+        </Clickable>
+      </>
+    )
+  }
 }
 
 var Area = styled.div`
