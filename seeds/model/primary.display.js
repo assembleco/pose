@@ -2,14 +2,10 @@ import React from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react"
 
-import ReactMarkdown from 'react-markdown'
-
 export default observer(({ model }) => {
   return (
     <Bin>
-      <ReactMarkdown>
-        {model.label}
-      </ReactMarkdown>
+      {model.label}
     </Bin>
   )
 })
