@@ -10,7 +10,7 @@ const display_cache = observable.map({});
 var choose = observable.box(false)
 
 const loadDisplay = (model, display) => {
-  var Component = loadable(() => import(`../models/${snake_case(model)}/displays/${display}`))
+  var Component = loadable(() => import(`../models/${snake_case(model)}/${display}.display`))
 
   if (!display_cache.get(model))
     display_cache.set(model, observable.map({}))
@@ -52,7 +52,7 @@ var loadDisplays = (model) => {
     .context('../models/', true, /\.js$/)
     .keys()
     .map((file) => {
-      const module = new RegExp(`^./${snake_case(model.name)}/displays/(.+).js$`).exec(file);
+      const module = new RegExp(`^\./${snake_case(model.name)}/(.+)\.display\.js$`).exec(file);
       return module && module[1];
     })
     .filter((file) => file !== 'index')
@@ -62,6 +62,7 @@ var loadDisplays = (model) => {
 
   var displayable = types
     .model({ _display: 'primary' })
+    .actions(model => ({ claim: (key, assign) => model[key] = assign }))
     .views(self => {
       var views = {}
 
@@ -69,7 +70,9 @@ var loadDisplays = (model) => {
         views[display] = () => render(self, model.name, display)
       })
 
-      views.display = () => {
+      views.display = (inicial = null) => {
+        if(inicial) self.claim('_display', inicial)
+
         if(typeof(self[self._display]) === 'function') {
           if(choose.get())
             return (

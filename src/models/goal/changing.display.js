@@ -2,7 +2,7 @@ import React from "react"
 import { observer } from "mobx-react"
 import { Icon } from "@iconify/react"
 
-import replace from "../../../replace"
+import replace from "../../replace"
 
 export default observer(({ model }) => {
   return (
